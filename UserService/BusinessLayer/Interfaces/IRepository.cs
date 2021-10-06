@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Interfaces
 {
-    interface IRepository<T, Y>
+    public interface IRepository<T, Y>
     {
         /// <summary>
         /// add something to the database
