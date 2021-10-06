@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Interfaces
 {
-    interface IMapper<T, Y>
+    public interface IMapper<T, Y>
     {
         /// <summary>
         /// transroms a view model to a model

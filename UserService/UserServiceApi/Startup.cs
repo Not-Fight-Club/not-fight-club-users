@@ -1,4 +1,5 @@
 using BusinessLayer.Mappers;
+using BusinessLayer.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +14,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Models.DBModels;
+using BusinessLayer.Repositories;
+using DataLayerDBContext.DBModels;
 
 namespace UserServiceApi
 {
@@ -40,8 +44,9 @@ namespace UserServiceApi
                 });
             });
 
-            //services.AddSingleton<IRepository<ViewUser, string>, UserRepository>();
-            //services.AddSingleton<IMapper<User, ViewUser>, UserMapper>();
+            services.AddDbContext<NotFightClubUserContext>();
+            services.AddSingleton<IRepository<ViewUser, string>, UserInfoRepository>();
+            services.AddSingleton<IMapper<UserInfo, ViewUser>, UserMapper>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
