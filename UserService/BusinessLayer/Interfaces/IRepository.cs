@@ -26,6 +26,6 @@ namespace BusinessLayer.Interfaces
         /// read all items from a table and return a list of those items
         /// </summary>
         /// <returns></returns>
-        public Task<List<T>> Read();
+        public Task<List<T>> Update();
     }
 }

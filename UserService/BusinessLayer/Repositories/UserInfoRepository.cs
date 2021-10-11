@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessLayer.Interfaces;
-using DataLayerDBContext.DBModels;
+using DataLayerDBContext_DBContext;
 using Microsoft.EntityFrameworkCore;
-using Models.DBModels;
 using Models.Models;
+using Models_DBModels;
 
 namespace BusinessLayer.Repositories
 {
@@ -26,8 +26,9 @@ namespace BusinessLayer.Repositories
             //check if the UserInfo already exists if so decline the entry ( implement later)
             //convert to UserInfo with Mapper class
             UserInfo UserInfo = _mapper.ViewModelToModel(ViewUser);
+            UserInfo.LoginStreak = 1;
             //add to the db
-            _dbContext.Database.ExecuteSqlInterpolated($"Insert into UserInfo(UserName, PWord, Email, DOB, Active) values({UserInfo.UserName},{UserInfo.Pword},{UserInfo.Email},{UserInfo.Dob},{UserInfo.Active})");
+            _dbContext.Database.ExecuteSqlInterpolated($"Insert into UserInfo(UserName, PWord, Email, DOB, Active, LastLogin, LoginStreak) values({UserInfo.UserName},{UserInfo.Pword},{UserInfo.Email},{UserInfo.Dob},{UserInfo.Active}, {DateTime.Now}, {UserInfo.LoginStreak})");
             //save changes
             _dbContext.SaveChanges();
             //read UserInfo back from the db
@@ -38,20 +39,40 @@ namespace BusinessLayer.Repositories
 
         public async Task<ViewUser> Read(string email)
         {
-            UserInfo loggedUserInfo = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where email = {email}").FirstOrDefaultAsync();
+            UserInfo user = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where email = {email}").FirstOrDefaultAsync();
+
+            UpdateLoginStreak(user);
+
+             UserInfo loggedUserInfo = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where email = {email}").FirstOrDefaultAsync();
+
 
             return _mapper.ModelToViewModel(loggedUserInfo);
 
         }
 
-        public Task<ViewUser> Read(int obj)
+        public Task<List<ViewUser>> Update()
         {
             throw new NotImplementedException();
         }
+   
 
-        public Task<List<ViewUser>> Read()
+        public void UpdateLoginStreak(UserInfo user)
         {
-            throw new NotImplementedException();
+            if(user.LoginStreak == 7)
+            {
+                user.LoginStreak = 1;
+            }
+            else
+            {
+                user.LoginStreak = user.LoginStreak + 1;
+            }
+
+            _dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LoginStreak = {user.LoginStreak} WHERE Username = {user.UserName};");
+
+            user.LastLogin = DateTime.Now;
+            _dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {user.LastLogin} WHERE Username = {user.UserName};");
+
+
         }
 
     }

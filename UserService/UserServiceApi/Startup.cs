@@ -14,9 +14,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Models.DBModels;
 using BusinessLayer.Repositories;
-using DataLayerDBContext.DBModels;
+using DataLayerDBContext_DBContext;
+using Models_DBModels;
 
 namespace UserServiceApi
 {
@@ -38,7 +38,23 @@ namespace UserServiceApi
             {
                 options.AddPolicy(name: "NotFightClubLocal", builder =>
                 {
-                    builder.WithOrigins("http://localhost:5000")
+                    builder.WithOrigins(
+                           "https://localhost:5000",
+                           "https://localhost:5002",
+                           "https://localhost:5004",
+                           "https://localhost:5006",
+                           "https://localhost:5008",
+                           "https://localhost:5010",
+
+
+                           "http://localhost4200:",
+                           "http://localhost:5001",
+                           "http://localhost:5003",
+                           "http://localhost:5005",
+                           "http://localhost:5007",
+                           "http://localhost:5009",
+                           "http://localhost:5011"
+                        )
                     .AllowAnyHeader()
                     .AllowAnyMethod();
                 });

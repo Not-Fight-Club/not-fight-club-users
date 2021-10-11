@@ -18,5 +18,8 @@ namespace Models.Models
         public int? Bucks { get; set; }
         public bool Active { get; set; }
         public DateTime LastLogin { get; set; }
+        public int? LoginStreak { get; set; }
+        public string ProfilePic { get; set; }
+
     }
 }
