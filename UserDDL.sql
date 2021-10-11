@@ -11,7 +11,9 @@ Email nvarchar(50) not null,
 DOB date not null,
 Bucks int default 20 check (Bucks>=20),
 Active bit not null,
-LastLogin date not null
+LastLogin date not null,
+LoginStreak int not null,
+ProfilePic nvarchar
 )
 
 
@@ -24,3 +26,5 @@ StartDate Date not null,
 EndDate Date not null,
 RewardTier int not null
 )
+
+DROP TABLE UserInfo

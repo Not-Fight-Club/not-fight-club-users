@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interfaces;
-using Models.DBModels;
+using Models;
 using Models.Models;
+using Models_DBModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,6 +21,8 @@ namespace BusinessLayer.Mappers
              viewUser.UserId = user.UserId;
              viewUser.UserName = user.UserName;
              viewUser.Email = user.Email;
+            viewUser.LoginStreak = user.LoginStreak;
+            viewUser.LastLogin = user.LastLogin;
 
              //convert from datetime to string
 
@@ -50,6 +53,8 @@ namespace BusinessLayer.Mappers
              user.Pword = viewUser.Pword;
              user.Bucks = viewUser.Bucks;
             user.Active = viewUser.Active;
+            user.LoginStreak = viewUser.LoginStreak;
+            user.LastLogin = viewUser.LastLogin;
 
              user.UserId = g;
 

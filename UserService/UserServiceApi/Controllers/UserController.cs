@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DataLayerDBContext.DBModels;
-using Models.DBModels;
 using Models.Models;
 using Microsoft.Extensions.Logging;
 using BusinessLayer.Interfaces;
+using DataLayerDBContext_DBContext;
 
 namespace UserServiceApi.Controllers
 {
@@ -52,6 +51,7 @@ namespace UserServiceApi.Controllers
             //return the result
             //Console.WriteLine(viewUser);
             var registeredUser = await _ur.Add(viewUser);
+            
 
             _logger.LogInformation($"Registered New User with Username: {viewUser.UserName}");
             return Ok(registeredUser);
