@@ -13,7 +13,7 @@ Bucks int default 20 check (Bucks>=20),
 Active bit not null,
 LastLogin date not null,
 LoginStreak int not null,
-ProfilePic nvarchar
+ProfilePic varchar(MAX)
 )
 
 
