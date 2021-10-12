@@ -17,6 +17,7 @@ namespace Models_DBModels
         public DateTime LastLogin { get; set; }
         public int? LoginStreak { get; set; }
         public string ProfilePic { get; set; }
+        public bool RewardCollected { get; set; }
 
     }
 }
