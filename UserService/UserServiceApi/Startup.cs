@@ -47,8 +47,8 @@ namespace UserServiceApi
                            "https://localhost:5010",
 
 
-                           "http://localhost4200:",
-                           "http://localhost:5001",
+                           "http://localhost:4200",
+                           "https://localhost:5001",
                            "http://localhost:5003",
                            "http://localhost:5005",
                            "http://localhost:5007",
