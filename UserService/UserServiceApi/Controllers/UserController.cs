@@ -75,35 +75,6 @@ namespace UserServiceApi.Controllers
     }
 
     [HttpPut("/edit-profile/{id}")]
-    // public async Task<IActionResult> PutUsers(Guid id, [FromBody] UserInfo user)
-    // {
-    // _logger.LogInformation("Hit me");
-    // if (id != user.UserId)
-    // {
-    //   return BadRequest();
-    // }
-    // _logger.LogInformation($"Updating {user.UserName}'s profile");
-    // _context.Entry(user).State = EntityState.Modified;
-
-    // try
-    // {
-    //   await _context.SaveChangesAsync();
-    // }
-    // catch (DbUpdateConcurrencyException)
-    // {
-    //   if (!UserExists(id))
-    //   {
-    //     return NotFound();
-    //   }
-    //   else
-    //   {
-    //     throw;
-    //   }
-    // }
-    // _logger.LogInformation($"Updated details: Username: {user.UserName} || Email: {user.Email} || DOB: {user.Dob}");
-
-    // return NoContent();
-
     public async Task<ActionResult<ViewUser>> PutUsers(Guid id, [FromBody] ViewUser user)
     {
       _logger.LogInformation("Hit me");
