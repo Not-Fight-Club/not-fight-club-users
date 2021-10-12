@@ -66,10 +66,11 @@ namespace UserServiceApi.Controllers
 
     // GET: User/Details/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<UserInfo>> GetUserById(Guid id)
+    public async Task<ActionResult<ViewUser>> GetUserById(Guid id)
     {
-      var user = await _context.UserInfos.FindAsync(id);
+      ViewUser user = await _ur.ReadUser(id);
 
+      _logger.LogInformation($"{user.UserName} was selected.");
       return Ok(user);
     }
 
@@ -112,10 +113,10 @@ namespace UserServiceApi.Controllers
       }
       _logger.LogInformation($"Updating {user.UserName}'s profile");
       _logger.LogInformation($"{user}");
-      var updatedUser = await _ur.Update(user);
+      await _ur.Update(user);
       _logger.LogInformation($"Updated details: Username: {user.UserName} || Email: {user.Email} || DOB: {user.Dob}");
 
-      return Ok(updatedUser);
+      return Ok(user);
     }
     // }
 

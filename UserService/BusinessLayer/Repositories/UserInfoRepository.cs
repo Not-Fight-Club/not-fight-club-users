@@ -59,11 +59,11 @@ namespace BusinessLayer.Repositories
     //   //UserInfo updatedUser = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserId = {user.UserId}").FirstOrDefaultAsync();
     //   return _mapper.ModelToViewModel(updatedUser);
     // }
-    public bool Update(ViewUser user)
+    public async Task<bool> Update(ViewUser user)
     {
       UserInfo dbUser = _mapper.ViewModelToModel(user);
 
-      int rowsAffected = _dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, RewardCollected = {dbUser.RewardCollected}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email} WHERE UserId = {dbUser.UserId}");
+      int rowsAffected = await _dbContext.Database.ExecuteSqlInterpolatedAsync($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email}, RewardCollected = { dbUser.RewardCollected} WHERE UserId = {dbUser.UserId}");
 
       if (rowsAffected > 0)
         return true;
@@ -97,6 +97,14 @@ namespace BusinessLayer.Repositories
 
 
     }
+
+    public async Task<ViewUser> ReadUser(Guid id)
+    {
+      UserInfo product = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserId = {id}").FirstOrDefaultAsync();
+
+      return _mapper.ModelToViewModel(product);
+    }
+
 
   }
 }

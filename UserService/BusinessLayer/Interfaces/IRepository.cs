@@ -15,6 +15,8 @@ namespace BusinessLayer.Interfaces
     /// <returns></returns>
     public Task<T> Add(T obj);
 
+    public Task<T> ReadUser(Guid id);
+
     /// <summary>
     /// get a single object from the database 
     /// </summary>
@@ -28,6 +30,6 @@ namespace BusinessLayer.Interfaces
     /// read all items from a table and return a list of those items
     /// </summary>
     /// <returns></returns>
-    public bool Update(T user);
+    public Task<bool> Update(T user);
   }
 }
