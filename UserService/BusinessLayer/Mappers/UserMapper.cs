@@ -23,6 +23,7 @@ namespace BusinessLayer.Mappers
              viewUser.Email = user.Email;
             viewUser.LoginStreak = user.LoginStreak;
             viewUser.LastLogin = user.LastLogin;
+            viewUser.RewardCollected = user.RewardCollected;
 
              //convert from datetime to string
 
@@ -41,7 +42,6 @@ namespace BusinessLayer.Mappers
         public UserInfo ViewModelToModel(ViewUser viewUser)
          {
              UserInfo user = new UserInfo();
-             Guid g = Guid.NewGuid();
 
              user.UserName = viewUser.UserName;
              user.Email = viewUser.Email;
@@ -55,8 +55,9 @@ namespace BusinessLayer.Mappers
             user.Active = viewUser.Active;
             user.LoginStreak = viewUser.LoginStreak;
             user.LastLogin = viewUser.LastLogin;
+            user.RewardCollected = viewUser.RewardCollected;
 
-             user.UserId = g;
+             user.UserId = viewUser.UserId;
 
              return user;
          }

@@ -14,12 +14,17 @@ namespace BusinessLayer.Repositories
 
         public int GetReward(ViewUser user)
         {
-            if(DateTime.Now.Month > user.LastLogin.Month || DateTime.Now.Day > user.LastLogin.Day )
-            {
+            //if(DateTime.Now.Month > user.LastLogin.Month || DateTime.Now.Day > user.LastLogin.Day )
+            //{
+            //    return CalculateReward(user.LoginStreak);
+            //}
+            if (user.RewardCollected)
+                return -1;
+            else
+            { 
+                user.RewardCollected = true;
                 return CalculateReward(user.LoginStreak);
             }
-                
-            return -1;
         }
 
         private int CalculateReward(int? streak)
