@@ -9,7 +9,7 @@ namespace Models.Models
   public class ViewUser
   {
 
-    public Guid? UserId { get; set; }
+    public Guid UserId { get; set; }
     public string UserName { get; set; }
     public string Pword { get; set; }
     public string Email { get; set; }
@@ -19,6 +19,7 @@ namespace Models.Models
     public DateTime LastLogin { get; set; }
     public int? LoginStreak { get; set; }
     public string ProfilePic { get; set; }
+    public bool RewardCollected { get; set; }
 
   }
 }

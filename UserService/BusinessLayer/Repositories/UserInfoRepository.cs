@@ -20,7 +20,6 @@ namespace BusinessLayer.Repositories
     {
       _mapper = mapper;
     }
-
     public async Task<ViewUser> Add(ViewUser ViewUser)
     {
       //check if the UserInfo already exists if so decline the entry ( implement later)
@@ -28,55 +27,73 @@ namespace BusinessLayer.Repositories
       UserInfo UserInfo = _mapper.ViewModelToModel(ViewUser);
       UserInfo.LoginStreak = 1;
       //add to the db
-      _dbContext.Database.ExecuteSqlInterpolated($"Insert into UserInfo(UserName, PWord, Email, DOB, Active, LastLogin, LoginStreak) values({UserInfo.UserName},{UserInfo.Pword},{UserInfo.Email},{UserInfo.Dob},{UserInfo.Active}, {DateTime.Now}, {UserInfo.LoginStreak})");
+      _dbContext.Database.ExecuteSqlInterpolated($"Insert into UserInfo(UserName, PWord, Email, DOB, Active, LastLogin, LoginStreak, RewardCollected) values({UserInfo.UserName},{UserInfo.Pword},{UserInfo.Email},{UserInfo.Dob},{UserInfo.Active}, {DateTime.Now}, {UserInfo.LoginStreak}, {UserInfo.RewardCollected})");
       //save changes
       _dbContext.SaveChanges();
       //read UserInfo back from the db
       UserInfo registeredUserInfo = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserName = {UserInfo.UserName} and PWord ={UserInfo.Pword}").FirstOrDefaultAsync();
-
       return _mapper.ModelToViewModel(registeredUserInfo);
     }
-
     public async Task<ViewUser> Read(string email)
     {
+      //Set bd user model with information from database
       UserInfo user = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where email = {email}").FirstOrDefaultAsync();
 
-      UpdateLoginStreak(user);
+      ViewUser viewUser = _mapper.ModelToViewModel(user);
 
-      UserInfo loggedUserInfo = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where email = {email}").FirstOrDefaultAsync();
+      //update login streak for logging in 
+      UpdateLoginStreak(viewUser);
+
+      //UserInfo loggedUserInfo = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where email = {email}").FirstOrDefaultAsync();
 
 
-      return _mapper.ModelToViewModel(loggedUserInfo);
-
+      return viewUser;
     }
 
-    public async Task<ViewUser> Update(ViewUser viewUser)
+    //     public async Task<ViewUser> Update(ViewUser viewUser)
+    // {
+    //   UserInfo user = _mapper.ViewModelToModel(viewUser);
+    //   var users = _dbContext.Database.ExecuteSqlInterpolated($"Update UserInfo Set UserName = {user.UserName}, Email = {user.Email}, DOB = {user.Dob}, PWord = {user.Pword}, Bucks = {user.Bucks}, Active = {user.Active}, LoginStreak = {user.LoginStreak}, LastLogin = {user.LastLogin}, ProfilePic = {user.ProfilePic}, Where UserId={user.UserId}");
+    //         await _dbContext.SaveChangesAsync();
+    //         UserInfo updatedUser = await _dbContext.FindAsync<UserInfo>($"{user.UserId}");
+    //   //UserInfo updatedUser = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserId = {user.UserId}").FirstOrDefaultAsync();
+    //   return _mapper.ModelToViewModel(updatedUser);
+    // }
+    public bool Update(ViewUser user)
     {
-      UserInfo user = _mapper.ViewModelToModel(viewUser);
-      var users = _dbContext.Database.ExecuteSqlInterpolated($"Update UserInfo Set UserName = {user.UserName}, Email = {user.Email}, DOB = {user.Dob}, PWord = {user.Pword}, Bucks = {user.Bucks}, Active = {user.Active}, LoginStreak = {user.LoginStreak}, LastLogin = {user.LastLogin}, ProfilePic = {user.ProfilePic}, Where UserId={user.UserId}");
+      UserInfo dbUser = _mapper.ViewModelToModel(user);
 
-            await _dbContext.SaveChangesAsync();
-            UserInfo updatedUser = await _dbContext.FindAsync<UserInfo>($"{user.UserId}");
-      //UserInfo updatedUser = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserId = {user.UserId}").FirstOrDefaultAsync();
-      return _mapper.ModelToViewModel(updatedUser);
-    }
+      int rowsAffected = _dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, RewardCollected = {dbUser.RewardCollected}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email} WHERE UserId = {dbUser.UserId}");
 
-
-    public void UpdateLoginStreak(UserInfo user)
-    {
-      if (user.LoginStreak == 7)
-      {
-        user.LoginStreak = 1;
-      }
+      if (rowsAffected > 0)
+        return true;
       else
-      {
-        user.LoginStreak = user.LoginStreak + 1;
-      }
+        return false;
+    }
 
-      _dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LoginStreak = {user.LoginStreak} WHERE Username = {user.UserName};");
+
+    public void UpdateLoginStreak(ViewUser user)
+    {
+      //if last login date is before today increment streak
+      if (user.LastLogin < DateTime.Now)
+      {
+        //if streak is at 7 roll back to 1
+        if (user.LoginStreak == 7)
+        {
+          user.LoginStreak = 1;
+        }
+        else
+        {
+          //otherwise increase by 1
+          user.LoginStreak = user.LoginStreak + 1;
+        }
+      }
+      //update user in database with current information
+      //_dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LoginStreak = {user.LoginStreak} WHERE Username = {user.UserName};");
 
       user.LastLogin = DateTime.Now;
-      _dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {user.LastLogin} WHERE Username = {user.UserName};");
+      // _dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {user.LastLogin} WHERE Username = {user.UserName};");
+      Update(user);
 
 
     }

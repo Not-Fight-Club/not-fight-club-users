@@ -22,10 +22,12 @@ namespace BusinessLayer.Interfaces
     /// <returns></returns>
     public Task<T> Read(Y obj);
 
+
+
     /// <summary>
     /// read all items from a table and return a list of those items
     /// </summary>
     /// <returns></returns>
-    public Task<T> Update(T obj);
+    public bool Update(T user);
   }
 }
