@@ -24,6 +24,8 @@ namespace BusinessLayer.Interfaces
     /// <returns></returns>
     public Task<T> Read(Y obj);
 
+    public Task<T> Delete(Guid id);
+
 
 
     /// <summary>

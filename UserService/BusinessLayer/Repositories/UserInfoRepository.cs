@@ -105,6 +105,16 @@ namespace BusinessLayer.Repositories
       return _mapper.ModelToViewModel(product);
     }
 
+    public async Task<ViewUser> Delete(Guid id)
+    {
+
+      UserInfo user = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo Where UserId = {id}").FirstOrDefaultAsync();
+      _dbContext.Remove(user);
+      await _dbContext.SaveChangesAsync();
+
+      return _mapper.ModelToViewModel(user);
+
+    }
 
   }
 }

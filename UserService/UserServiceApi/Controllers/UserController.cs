@@ -193,6 +193,12 @@ namespace UserServiceApi.Controllers
     //    await _context.SaveChangesAsync();
     //    return RedirectToAction(nameof(Index));
     //}
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<ViewUser>> DeleteUser(Guid id)
+    {
+      await _ur.Delete(id);
+      return Ok();
+    }
 
     private bool UserExists(Guid id)
     {
