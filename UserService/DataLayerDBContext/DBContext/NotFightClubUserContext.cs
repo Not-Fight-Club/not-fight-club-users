@@ -26,7 +26,7 @@ namespace DataLayerDBContext_DBContext
       if (!optionsBuilder.IsConfigured)
       {
         optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=NotFightClubUser;Trusted_Connection=True;");
-        // optionsBuilder.UseSqlServer("Server=08162021dotnetuta.database.windows.net;Database=ShopDb;User Id=sqladmin;Password=Password12345;");
+        // optionsBuilder.UseSqlServer("Server=08162021dotnetuta.database.windows.net;Database=UserDb;User Id=sqladmin;Password=Password12345;");
 
       }
     }
@@ -51,6 +51,7 @@ namespace DataLayerDBContext_DBContext
                   .HasColumnName("DOB");
 
         entity.Property(e => e.Email).HasMaxLength(50);
+        entity.Property(e => e.ProfilePic);
 
         entity.Property(e => e.LastLogin).HasColumnType("date");
 
