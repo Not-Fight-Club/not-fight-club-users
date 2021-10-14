@@ -59,6 +59,7 @@ namespace BusinessLayer.Repositories
             UserInfo dbUser = _mapper.ViewModelToModel(user);
 
             int rowsAffected =_dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, RewardCollected = {dbUser.RewardCollected}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email} WHERE UserId = {dbUser.UserId}");
+            _dbContext.SaveChanges();
 
             if (rowsAffected > 0)
                 return true;
