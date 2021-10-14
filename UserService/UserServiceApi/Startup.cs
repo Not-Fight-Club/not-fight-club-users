@@ -42,7 +42,7 @@ namespace UserServiceApi
         options.AddPolicy(name: "NotFightClubLocal", builder =>
               {
                 builder.WithOrigins(
-                             "https://localhost:5000",
+                             "https://localhost:5001",
                              "https://localhost:5002",
                              "https://localhost:5004",
                              "https://localhost:5006",
@@ -51,7 +51,7 @@ namespace UserServiceApi
 
 
                              "http://localhost:4200",
-                             "http://localhost:5001",
+                             "http://localhost:5000",
                              "http://localhost:5003",
                              "http://localhost:5005",
                              "http://localhost:5007",

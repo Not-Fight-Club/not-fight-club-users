@@ -31,7 +31,7 @@ namespace BusinessLayer.Repositories
       //save changes
       _dbContext.SaveChanges();
       //read UserInfo back from the db
-      UserInfo registeredUserInfo = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserName = {UserInfo.UserName} and PWord ={UserInfo.Pword}").FirstOrDefaultAsync();
+      UserInfo registeredUserInfo = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserName = {UserInfo.UserName} and PWord ={UserInfo.Pword} and Email ={UserInfo.Email}").FirstOrDefaultAsync();
       return _mapper.ModelToViewModel(registeredUserInfo);
     }
     public async Task<ViewUser> Read(string email)
@@ -72,7 +72,7 @@ namespace BusinessLayer.Repositories
     }
 
 
-    public void UpdateLoginStreak(ViewUser user)
+    public async void UpdateLoginStreak(ViewUser user)
     {
       //if last login date is before today increment streak
       if (user.LastLogin < DateTime.Now)
@@ -93,9 +93,12 @@ namespace BusinessLayer.Repositories
 
       user.LastLogin = DateTime.Now;
       // _dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {user.LastLogin} WHERE Username = {user.UserName};");
-      Update(user);
+       await Update(user);
       
-            int rowsAffected =_dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, RewardCollected = {dbUser.RewardCollected}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email} WHERE UserId = {dbUser.UserId}");
+        //what does this line of code do?
+        //what is the dbUser?
+        //Do we need to add something back?
+       // int rowsAffected =_dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, RewardCollected = {dbUser.RewardCollected}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email} WHERE UserId = {dbUser.UserId}");
             _dbContext.SaveChanges();
 
 

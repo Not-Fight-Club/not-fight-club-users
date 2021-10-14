@@ -32,6 +32,7 @@ namespace UserServiceApi.Controllers
 
 
     [HttpGet("/[action]/{email}")]
+    //what if multiple 
     public async Task<ActionResult<ViewUser>> Login(string email)
     {
 

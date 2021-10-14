@@ -59,8 +59,16 @@ namespace BusinessLayer.Mappers
       user.LastLogin = viewUser.LastLogin;
       user.RewardCollected = viewUser.RewardCollected;
       user.ProfilePic = viewUser.ProfilePic;
-
-      user.UserId = viewUser.UserId;
+      if(viewUser.UserId == null)
+        {
+            Guid g = new Guid();
+            user.UserId = g;
+        }
+      else
+        {
+            user.UserId = (Guid)viewUser.UserId;
+        }
+      
 
       return user;
     }
