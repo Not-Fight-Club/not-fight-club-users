@@ -94,6 +94,10 @@ namespace BusinessLayer.Repositories
       user.LastLogin = DateTime.Now;
       // _dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {user.LastLogin} WHERE Username = {user.UserName};");
       Update(user);
+      
+            int rowsAffected =_dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, RewardCollected = {dbUser.RewardCollected}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email} WHERE UserId = {dbUser.UserId}");
+            _dbContext.SaveChanges();
+
 
 
     }
