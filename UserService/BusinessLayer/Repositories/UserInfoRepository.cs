@@ -29,15 +29,17 @@ namespace BusinessLayer.Repositories
       //add to the db
       _dbContext.Database.ExecuteSqlInterpolated($"Insert into UserInfo(UserName, PWord, Email, DOB, Active, LastLogin, LoginStreak, RewardCollected) values({UserInfo.UserName},{UserInfo.Pword},{UserInfo.Email},{UserInfo.Dob},{UserInfo.Active}, {DateTime.Now}, {UserInfo.LoginStreak}, {UserInfo.RewardCollected})");
       //save changes
-      _dbContext.SaveChanges();
+      await _dbContext.SaveChangesAsync();
       //read UserInfo back from the db
-      UserInfo registeredUserInfo = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserName = {UserInfo.UserName} and PWord ={UserInfo.Pword}").FirstOrDefaultAsync();
+      UserInfo registeredUserInfo = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserName = {UserInfo.UserName} and PWord ={UserInfo.Pword} and Email ={UserInfo.Email}").FirstOrDefaultAsync();
       return _mapper.ModelToViewModel(registeredUserInfo);
     }
     public async Task<ViewUser> Read(string email)
     {
       //Set bd user model with information from database
       UserInfo user = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where email = {email}").FirstOrDefaultAsync();
+
+           // _dbContext.
 
       ViewUser viewUser = _mapper.ModelToViewModel(user);
 
@@ -63,16 +65,34 @@ namespace BusinessLayer.Repositories
     {
       UserInfo dbUser = _mapper.ViewModelToModel(user);
 
-      int rowsAffected = await _dbContext.Database.ExecuteSqlInterpolatedAsync($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email}, RewardCollected = { dbUser.RewardCollected} WHERE UserId = {dbUser.UserId}");
+            //int rowsAffected = await _dbContext.Database.ExecuteSqlInterpolatedAsync($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email}, RewardCollected = { dbUser.RewardCollected} WHERE UserId = {dbUser.UserId}");
+            //_dbContext.Entry(dbUser).Reload();
+            
+            var returned = await _dbContext.UserInfos.SingleOrDefaultAsync(u => u.UserId == user.UserId);
 
-      if (rowsAffected > 0)
-        return true;
-      else
-        return false;
+            returned.UserName = user.UserName;
+            returned.ProfilePic = user.ProfilePic;
+            returned.Dob = user.Dob;
+            returned.Bucks = user.Bucks;
+            returned.Email = user.Email;
+            returned.LastLogin = user.LastLogin;
+            returned.LoginStreak = user.LoginStreak;
+            returned.Pword = user.Pword;
+            returned.RewardCollected = user.RewardCollected;
+            returned.Active = user.Active;
+            
+
+            await _dbContext.SaveChangesAsync();
+            //if (rowsAffected > 0)
+            //    return true;
+            //else
+            //    return false;
+            return true;
+            
     }
 
 
-    public void UpdateLoginStreak(ViewUser user)
+    public async void UpdateLoginStreak(ViewUser user)
     {
       //if last login date is before today increment streak
       if (user.LastLogin < DateTime.Now)
@@ -93,9 +113,12 @@ namespace BusinessLayer.Repositories
 
       user.LastLogin = DateTime.Now;
       // _dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {user.LastLogin} WHERE Username = {user.UserName};");
-      Update(user);
+       await Update(user);
       
-            int rowsAffected =_dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, RewardCollected = {dbUser.RewardCollected}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email} WHERE UserId = {dbUser.UserId}");
+        //what does this line of code do?
+        //what is the dbUser?
+        //Do we need to add something back?
+       // int rowsAffected =_dbContext.Database.ExecuteSqlInterpolated($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, RewardCollected = {dbUser.RewardCollected}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email} WHERE UserId = {dbUser.UserId}");
             _dbContext.SaveChanges();
 
 
