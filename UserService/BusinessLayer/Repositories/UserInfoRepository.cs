@@ -29,7 +29,7 @@ namespace BusinessLayer.Repositories
       //add to the db
       _dbContext.Database.ExecuteSqlInterpolated($"Insert into UserInfo(UserName, PWord, Email, DOB, Active, LastLogin, LoginStreak, RewardCollected) values({UserInfo.UserName},{UserInfo.Pword},{UserInfo.Email},{UserInfo.Dob},{UserInfo.Active}, {DateTime.Now}, {UserInfo.LoginStreak}, {UserInfo.RewardCollected})");
       //save changes
-      _dbContext.SaveChanges();
+      await _dbContext.SaveChangesAsync();
       //read UserInfo back from the db
       UserInfo registeredUserInfo = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserName = {UserInfo.UserName} and PWord ={UserInfo.Pword} and Email ={UserInfo.Email}").FirstOrDefaultAsync();
       return _mapper.ModelToViewModel(registeredUserInfo);
@@ -38,6 +38,8 @@ namespace BusinessLayer.Repositories
     {
       //Set bd user model with information from database
       UserInfo user = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where email = {email}").FirstOrDefaultAsync();
+
+           // _dbContext.
 
       ViewUser viewUser = _mapper.ModelToViewModel(user);
 
@@ -63,12 +65,30 @@ namespace BusinessLayer.Repositories
     {
       UserInfo dbUser = _mapper.ViewModelToModel(user);
 
-      int rowsAffected = await _dbContext.Database.ExecuteSqlInterpolatedAsync($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email}, RewardCollected = { dbUser.RewardCollected} WHERE UserId = {dbUser.UserId}");
+            //int rowsAffected = await _dbContext.Database.ExecuteSqlInterpolatedAsync($"UPDATE UserInfo SET LastLogin = {dbUser.LastLogin}, LoginStreak = {dbUser.LoginStreak}, ProfilePic = {dbUser.ProfilePic}, UserName = {dbUser.UserName}, PWord = {dbUser.Pword}, DOB = {dbUser.Dob}, Email = {dbUser.Email}, RewardCollected = { dbUser.RewardCollected} WHERE UserId = {dbUser.UserId}");
+            //_dbContext.Entry(dbUser).Reload();
+            
+            var returned = await _dbContext.UserInfos.SingleOrDefaultAsync(u => u.UserId == user.UserId);
 
-      if (rowsAffected > 0)
-        return true;
-      else
-        return false;
+            returned.UserName = user.UserName;
+            returned.ProfilePic = user.ProfilePic;
+            returned.Dob = user.Dob;
+            returned.Bucks = user.Bucks;
+            returned.Email = user.Email;
+            returned.LastLogin = user.LastLogin;
+            returned.LoginStreak = user.LoginStreak;
+            returned.Pword = user.Pword;
+            returned.RewardCollected = user.RewardCollected;
+            returned.Active = user.Active;
+            
+
+            await _dbContext.SaveChangesAsync();
+            //if (rowsAffected > 0)
+            //    return true;
+            //else
+            //    return false;
+            return true;
+            
     }
 
 
