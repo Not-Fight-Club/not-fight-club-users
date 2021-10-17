@@ -40,7 +40,9 @@ namespace UserServiceApi.Controllers
 
       var loggedUser = await _ur.Read(email);
 
+
       _logger.LogInformation($"{loggedUser.UserName} logged in");
+      _logger.LogCritical("Critical Test Log");
 
       return Ok(loggedUser);
     }
