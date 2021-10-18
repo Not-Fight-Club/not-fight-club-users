@@ -36,6 +36,7 @@ namespace BusinessLayer.Repositories
     }
     public async Task<ViewUser> Read(string email)
     {
+
       //Set bd user model with information from database
       UserInfo user = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where email = {email}").FirstOrDefaultAsync();
 
