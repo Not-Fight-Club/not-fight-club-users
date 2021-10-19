@@ -227,7 +227,7 @@ namespace UserServiceApi.Controllers
       return data;
     }
 
-    [HttpPost("/[action]")]
+    [HttpPut("/[action]")]
     //
     public async Task<ActionResult<ViewUserBucks>> UpdateTotal(ViewUserBucks viewUserBucks)
     {
@@ -239,7 +239,7 @@ namespace UserServiceApi.Controllers
       return Ok(result);
     }
 
-    [HttpPost("/[action]")]
+    [HttpPut("/[action]")]
     public async Task<ActionResult<ViewUserBucks>> UpdateTotalList(List<ViewUserBucks> totalsToUpdate)
     {
       if (!ModelState.IsValid) return BadRequest("Invalid data.");
