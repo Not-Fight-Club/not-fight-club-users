@@ -126,6 +126,35 @@ namespace BusinessLayer.Repositories
 
     }
 
+    /*
+    /// <summary>
+    /// Update a user's total by adding bucksToAdjust (positive or negative value)
+    /// </summary>
+    /// <param name="id">user id</param>
+    /// <param name="bucksToAdjust">amount to add/subtract from user's total</param>
+    /// <returns></returns>
+    public async Task<int> UpdateBucks(Guid id, int bucksToAdjust)
+    {
+      var user = await (from u in _dbContext.UserInfos where u.UserId == id select u).FirstOrDefaultAsync();
+      if (user == null)
+      {
+        throw new ArgumentException($"User with id {id} doesn't exist");
+      }
+      if (user.Bucks == null)
+      {
+        user.Bucks = 0;
+      }
+      int newTotal = (int)user.Bucks + bucksToAdjust;
+      if (newTotal < 0)
+      {
+        throw new ArgumentException("User bucks total cannot go negative");
+      }
+      user.Bucks = newTotal;
+      await _dbContext.SaveChangesAsync();
+      return newTotal;
+    }
+    */
+
     public async Task<ViewUser> ReadUser(Guid id)
     {
       UserInfo product = await _dbContext.UserInfos.FromSqlInterpolated($"select * from UserInfo where UserId = {id}").FirstOrDefaultAsync();
