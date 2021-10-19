@@ -196,6 +196,63 @@ namespace UserServiceApi.Controllers
     //    await _context.SaveChangesAsync();
     //    return RedirectToAction(nameof(Index));
     //}
+
+    /// <summary>
+    /// Update a user's total bucks by adding the provided value to the provided user
+    /// </summary>
+    /// <param name="data">an object containing the userId (guid) and the change in bucks (+/- int)</param>
+    /// <returns></returns>
+    private async Task<ViewUserBucks> UpdateUserTotal(ViewUserBucks data)
+    {
+     //get view user to run logic on 
+      var user = await _ur.ReadUser(data.UserId);
+      //send view user into method to adjust bucks
+      if (user == null)
+      {
+        throw new ArgumentException($"User with id {data.UserId} doesn't exist");
+      }
+      if (user.Bucks == null)
+      {
+        user.Bucks = 0;
+      }
+      // 
+      int newTotal = (int)user.Bucks + data.TotalCurrency;
+      if (newTotal < 0)
+      {
+        throw new ArgumentException("User bucks total cannot go negative");
+      }
+      user.Bucks = newTotal;
+      await _ur.Update(user);
+      data.TotalCurrency = newTotal;
+      return data;
+    }
+
+    [HttpPost("/[action]")]
+    //
+    public async Task<ActionResult<ViewUserBucks>> UpdateTotal(ViewUserBucks viewUserBucks)
+    {
+      //check model
+      if (!ModelState.IsValid) return BadRequest("Invalid data.");
+
+      var result = await UpdateUserTotal(viewUserBucks);
+
+      return Ok(result);
+    }
+
+    [HttpPost("/[action]")]
+    public async Task<ActionResult<ViewUserBucks>> UpdateTotalList(List<ViewUserBucks> totalsToUpdate)
+    {
+      if (!ModelState.IsValid) return BadRequest("Invalid data.");
+
+      var results = new List<ViewUserBucks>();
+      foreach (var toUpdate in totalsToUpdate)
+      {
+        var result = await UpdateUserTotal(toUpdate);
+        results.Add(result);
+      }
+      return Ok(results);
+    }
+
     [HttpDelete("{id}")]
     public async Task<ActionResult<ViewUser>> DeleteUser(Guid id)
     {
