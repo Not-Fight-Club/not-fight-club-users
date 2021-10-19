@@ -19,6 +19,7 @@ using DataLayerDBContext_DBContext;
 using Models_DBModels;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace UserServiceApi
 {
@@ -63,7 +64,13 @@ namespace UserServiceApi
               });
       });
 
-      services.AddDbContext<NotFightClubUserContext>();
+      services.AddDbContext<NotFightClubUserContext>(options => {
+          if (!options.IsConfigured)
+          {
+              options.UseSqlServer(Configuration.GetConnectionString("Default"));
+          }
+
+      });
       services.AddSingleton<IRepository<ViewUser, string>, UserInfoRepository>();
       services.AddSingleton<IMapper<UserInfo, ViewUser>, UserMapper>();
 

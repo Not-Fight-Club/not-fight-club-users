@@ -23,12 +23,7 @@ namespace DataLayerDBContext_DBContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-      if (!optionsBuilder.IsConfigured)
-      {
-        optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=NotFightClubUser;Trusted_Connection=True;");
-        // optionsBuilder.UseSqlServer("Server=08162021dotnetuta.database.windows.net;Database=UserDb;User Id=sqladmin;Password=Password12345;");
-
-      }
+      
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
