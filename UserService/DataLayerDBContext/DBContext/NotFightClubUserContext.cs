@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Models;
 using Models_DBModels;
+using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
@@ -10,14 +11,18 @@ namespace DataLayerDBContext_DBContext
 {
   public partial class NotFightClubUserContext : DbContext
   {
-    public NotFightClubUserContext()
-    {
-    }
+        private readonly IConfiguration _configuration;
 
-    public NotFightClubUserContext(DbContextOptions<NotFightClubUserContext> options)
+        public NotFightClubUserContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+    public NotFightClubUserContext(DbContextOptions<NotFightClubUserContext> options, IConfiguration configuration)
         : base(options)
-    {
-    }
+        {
+            _configuration = configuration;
+        }
 
     public virtual DbSet<UserInfo> UserInfos { get; set; }
 
@@ -25,7 +30,7 @@ namespace DataLayerDBContext_DBContext
     {
       if (!optionsBuilder.IsConfigured)
       {
-        optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=NotFightClubUser;Trusted_Connection=True;");
+        optionsBuilder.UseSqlServer(_configuration.GetConnectionString("Default"));
         // optionsBuilder.UseSqlServer("Server=08162021dotnetuta.database.windows.net;Database=UserDb;User Id=sqladmin;Password=Password12345;");
 
       }
