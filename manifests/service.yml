@@ -1,8 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
+    annotations:
+        service.beta.kubernetes.io/azure-load-balancer-resource-group: p3_fight_club
     name: user
 spec:
+    loadBalancerIP: 52.170.198.46
     type: LoadBalancer
     ports:
     - port: 5001 
