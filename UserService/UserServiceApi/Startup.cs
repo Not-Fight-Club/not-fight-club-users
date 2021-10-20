@@ -56,7 +56,8 @@ namespace UserServiceApi
                              "http://localhost:5005",
                              "http://localhost:5007",
                              "http://localhost:5009",
-                             "http://localhost:5011"
+                             "http://localhost:5011",
+                             "http://notfightclub.eastus.cloudapp.azure.com"
                           )
                       .AllowAnyHeader()
                       .AllowAnyMethod();
