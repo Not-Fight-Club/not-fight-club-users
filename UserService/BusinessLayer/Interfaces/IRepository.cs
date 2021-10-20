@@ -32,6 +32,6 @@ namespace BusinessLayer.Interfaces
     /// read all items from a table and return a list of those items
     /// </summary>
     /// <returns></returns>
-    public Task<bool> Update(T user);
+    Task<bool> Update(T user);
   }
 }
