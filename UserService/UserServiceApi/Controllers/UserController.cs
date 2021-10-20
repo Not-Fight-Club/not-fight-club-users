@@ -217,10 +217,12 @@ namespace UserServiceApi.Controllers
       }
       // 
       int newTotal = (int)user.Bucks + data.TotalCurrency;
+      /*
       if (newTotal < 0)
       {
         throw new ArgumentException("User bucks total cannot go negative");
       }
+      */
       user.Bucks = newTotal;
       await _ur.Update(user);
       data.TotalCurrency = newTotal;
