@@ -2,9 +2,9 @@
 # Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
-trigger: none
-pr:
-- main
+trigger: testing-deployment
+# pr:
+# - main
 
 resources:
 - repo: self
