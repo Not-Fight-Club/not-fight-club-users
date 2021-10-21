@@ -13,12 +13,13 @@ namespace BusinessLayer.Repositories
 {
   public class UserInfoRepository : IRepository<ViewUser, string>
   {
-    private readonly NotFightClubUserContext _dbContext = new NotFightClubUserContext();
+    private readonly NotFightClubUserContext _dbContext;
     private readonly IMapper<UserInfo, ViewUser> _mapper;
 
-    public UserInfoRepository(IMapper<UserInfo, ViewUser> mapper)
+    public UserInfoRepository(IMapper<UserInfo, ViewUser> mapper, NotFightClubUserContext context)
     {
       _mapper = mapper;
+      _dbContext = context;
     }
     public async Task<ViewUser> Add(ViewUser ViewUser)
     {

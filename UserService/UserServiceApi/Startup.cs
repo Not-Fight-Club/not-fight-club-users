@@ -65,8 +65,8 @@ namespace UserServiceApi
       });
 
       services.AddDbContext<NotFightClubUserContext>();
-      services.AddSingleton<IRepository<ViewUser, string>, UserInfoRepository>();
-      services.AddSingleton<IMapper<UserInfo, ViewUser>, UserMapper>();
+      services.AddScoped<IRepository<ViewUser, string>, UserInfoRepository>();
+      services.AddScoped<IMapper<UserInfo, ViewUser>, UserMapper>();
 
       // services.AddHttpClient(Options.DefaultName, configure =>
       //       {
