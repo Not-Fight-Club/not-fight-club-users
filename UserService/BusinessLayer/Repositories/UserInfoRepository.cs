@@ -16,10 +16,12 @@ namespace BusinessLayer.Repositories
     private readonly NotFightClubUserContext _dbContext;
     private readonly IMapper<UserInfo, ViewUser> _mapper;
 
+
     public UserInfoRepository(IMapper<UserInfo, ViewUser> mapper, NotFightClubUserContext dbContext)
     {
         _dbContext = dbContext;
         _mapper = mapper;
+
     }
     public async Task<ViewUser> Add(ViewUser ViewUser)
     {
